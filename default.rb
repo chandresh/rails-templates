@@ -5,9 +5,10 @@ remove_file 'app/views/layouts/application.html.erb'
 inject_into_file 'config/application.rb', :after => "config.assets.version = '1.0'" do
   <<-CODE
   
-  # Load Compass
-  config.sass.load_paths << "\#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
-  config.sass.load_paths << "\#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/blueprint/stylesheets"
+    
+    # Load Compass
+    config.sass.load_paths << "\#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
+    config.sass.load_paths << "\#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/blueprint/stylesheets"
   CODE
 end
 
