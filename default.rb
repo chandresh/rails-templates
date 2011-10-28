@@ -1,25 +1,35 @@
-app_name = ask("What's the app name?")
-
-run "rm public/index.html"
-run "rm app/assets/stylesheets/application.css"
-run "rm app/views/layouts/application.html.erb"
-run "capify ."
+remove_file 'public/index.html'
+remove_file 'app/assets/images/rails.png'
+remove_file 'app/assets/stylesheets/application.css'
+remove_file 'app/views/layouts/application.html.erb'
+inject_into_file 'config/application.rb', :after => "config.assets.version = '1.0'" do
+  <<-CODE
+  
+  # Load Compass
+  config.sass.load_paths << "\#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
+  config.sass.load_paths << "\#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/blueprint/stylesheets"
+  CODE
+end
 
 # gems
 gem "rack", :version => "1.3.3"
 gem 'rake', :version => '>= 0.9.2.2'
 gem "haml"
 gem "haml-rails"
+gem 'capistrano'
 gem "compass", :group => :assets
 gem 'execjs', :group => :production
 gem 'therubyracer', :group => :production
-gem 'capistrano'
-gem 'autotest'
-gem 'shoulda'
-gem 'rspec', '~> 2.4'
-gem 'rspec-rails', '~> 2.4'
+gem 'autotest', :group => [:development, :test]
+gem 'shoulda', :group => [:development, :test]
+gem 'rspec', '~> 2.4', :group => [:development, :test]
+gem 'rspec-rails', '~> 2.4', :group => [:development, :test]
+run 'bundle install'
 
-#TODO add compass to config
+rake "db:create", :env => 'development'
+rake "db:create", :env => 'test'
+generate 'rspec:install'
+run "capify ."
 
 # files
 file 'app/assets/stylesheets/application.css.sass',
